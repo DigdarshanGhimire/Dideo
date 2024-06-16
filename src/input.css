@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.testborder{
+    @apply border-solid border-black border-2;
+}
+
+.conferenceiconbtn{
+    @apply rounded-full bg-[rgba(0,0,0,0.5)] hover:bg-[rgba(0,0,0,0.7)] p-1 cursor-pointer;
+}
