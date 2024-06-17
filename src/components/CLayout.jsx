@@ -1,9 +1,8 @@
 import React from "react";
+import Btnicon from "./Btnicon";
 import { useState, useRef } from "react";
 
 const CLayout = () => {
-  const [micindex,setmicindex] = useState(0);
-  const [videoindex,setvideoindex] = useState(0);
 
   const videostat = useRef({
     0:(<svg
@@ -47,22 +46,21 @@ const CLayout = () => {
 });
 
   return (
-    <div className="holder testborder">
+    <div className="holder ">
       <div className="meetinglayout mx-2 my-1">
         <div className="meetinginfo text-center">
           <h2 className="meetingname font-bold text-2xl text-center">ASCL</h2>
           <span>Organizer - Digdarshan Ghimire</span>
         </div>
-        <div className="meeting testborder">
+        <div className="meeting ">
           <div className="meetingpeople">
-            <div className=" user text-center relative text-white font-bold user testborder bg-no-repeat bg-center w-[200px] h-[200px]  bg-[url('https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190710102234/download3.png')] bg-contain">
+            <div id="me" className=" user text-center relative text-white font-bold user  bg-no-repeat bg-center w-[200px] h-[200px]  bg-[url('https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190710102234/download3.png')] bg-contain">
               <div className="userinfo bg-[rgba(0,0,0,0.5)] text-center">
                 <span className="username">Digdarshan Ghimire</span>
               </div>
               <div className="deviceinfo absolute bottom-1 left-1 flex justify-center gap-4">
-                <div className="mic conferenceiconbtn" onClick={()=>{ setmicindex(1-micindex)}}>{audiostat[audioindex]}</div>
-
-                <div className="camera conferenceiconbtn" onClick={()=>{ setvideoindex(1-videoindex)}}>{videostat[videoindex]}</div>
+                <Btnicon btntype="mic" stat = {audiostat}  />
+                <Btnicon btntype="video" stat = {videostat}  />
               </div>
             </div>
           </div>
