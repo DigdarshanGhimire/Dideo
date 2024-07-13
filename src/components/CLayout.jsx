@@ -12,15 +12,15 @@ const CLayout = () => {
       <div className="meetinglayout mx-2 my-1">
         <div className="meetinginfo text-center">
           <h2 className="meetingname font-bold text-2xl text-center">ASCL</h2>
-          <span>Organizer - Digdarshan Ghimire</span>
+          <span>Organizer - Admin</span>
         </div>
-        <div className="meeting">
-          <div className="meetingpeople grid gap-5">
+        <div className="meeting ">
+          <div className="meetingpeople flex gap-5 ">
             <User/>
             <User/>
             <User/>
             <User/>
-            <User/>
+
           </div>
         </div>
       </div>

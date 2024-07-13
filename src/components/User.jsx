@@ -52,14 +52,14 @@ const User = () => {
     ),
   });
   return (
-    <div
+    <div 
       id="me"
       className=" user text-center relative text-white font-bold user  bg-no-repeat bg-center w-[200px] h-[200px]  bg-[url('https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190710102234/download3.png')] bg-contain"
     >
       <div className="userinfo bg-[rgba(0,0,0,0.5)] text-center">
-        <span className="username">Digdarshan Ghimire</span>
+        <span className="username">User</span>
       </div>
-      <div className="deviceinfo absolute bottom-1 left-1 flex justify-center gap-4">
+      <div className="deviceinfo absolute bottom-1 left-1 flex justify-center gap-4 ">
         <Btnicon btntype="mic" stat={audiostat} />
         <Btnicon btntype="video" stat={videostat} />
       </div>

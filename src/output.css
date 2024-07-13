@@ -562,16 +562,12 @@ video {
   position: relative;
 }
 
-.bottom-0 {
-  bottom: 0px;
+.bottom-1 {
+  bottom: 0.25rem;
 }
 
 .left-1 {
   left: 0.25rem;
-}
-
-.bottom-1 {
-  bottom: 0.25rem;
 }
 
 .mx-2 {
@@ -588,6 +584,10 @@ video {
   display: flex;
 }
 
+.grid {
+  display: grid;
+}
+
 .h-\[200px\] {
   height: 200px;
 }
@@ -596,12 +596,20 @@ video {
   width: 200px;
 }
 
+.items-center {
+  align-items: center;
+}
+
 .justify-center {
   justify-content: center;
 }
 
 .gap-4 {
   gap: 1rem;
+}
+
+.gap-5 {
+  gap: 1.25rem;
 }
 
 .bg-\[rgba\(0\2c 0\2c 0\2c 0\.5\)\] {
@@ -631,6 +639,11 @@ video {
 .text-2xl {
   font-size: 1.5rem;
   line-height: 2rem;
+}
+
+.text-3xl {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
 }
 
 .font-bold {
