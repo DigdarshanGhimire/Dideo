@@ -6,9 +6,13 @@ import Conference from './pages/Conference'
 import LogIn from './pages/LogIn'
 import SignUp from './pages/SignUp'
 import Home from './pages/Home'
+import Profile from "./pages/Profile";
+import checkValidation from "./components/functions/CheckValidation";
 
 
 const App = () => {
+
+  checkValidation();
   return(
     <BrowserRouter>
       <Routes>
@@ -16,6 +20,7 @@ const App = () => {
         <Route path="/conference" element={<Conference />}/>
         <Route path="/login" element={<LogIn />}/>
         <Route path="/signup" element={<SignUp />}/>
+        <Route path="/profile/id" element={<Profile />}/>
       </Routes>
     </BrowserRouter>
   )
