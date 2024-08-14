@@ -2,7 +2,7 @@ import React from "react";
 import Btnicon from "./Btnicon";
 import { useRef } from "react";
 
-const User = () => {
+const User = ({localStream,cam,mic}) => {
   const videostat = useRef({
     0: (
       <svg
@@ -54,14 +54,15 @@ const User = () => {
   return (
     <div 
       id="me"
-      className=" user text-center relative text-white font-bold user  bg-no-repeat bg-center w-[200px] h-[200px]  bg-[url('https://media.geeksforgeeks.org/wp-content/cdn-uploads/20190710102234/download3.png')] bg-contain"
+      className=" user text-center relative text-white font-bold user  bg-no-repeat bg-center w-[200px] h-[200px] bg-gray-900 bg-contain flex flex-col"
     >
       <div className="userinfo bg-[rgba(0,0,0,0.5)] text-center">
         <span className="username">User</span>
       </div>
+      <video ref={localStream} autoPlay playsInline muted className=""></video>
       <div className="deviceinfo absolute bottom-1 left-1 flex justify-center gap-4 ">
-        <Btnicon btntype="mic" stat={audiostat} />
-        <Btnicon btntype="video" stat={videostat} />
+        <Btnicon btntype="mic" stat={audiostat} tool={mic} />
+        <Btnicon btntype="video" stat={videostat} tool={cam}/>
       </div>
     </div>
   );

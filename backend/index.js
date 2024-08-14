@@ -62,9 +62,18 @@ const port = 3000;
 
 //Handling sockets
 io.on('connection',(socket) => {
-  console.log(socket.id);
+  console.log('socket.id')
+  socket.emit("me",socket.id)
   socket.on('disconnect',() => {
-    console.log("A user disconnected:" + String(socket.id));
+    socket.broadcast.emit('CallEnded');
+  }
+  )
+  socket.on('callUser',(data)=>{
+    io.to(data.userToCall).emit('callUser', {signal:data.signalData, from: data.from, name: data.name})
+  })
+
+  socket.on('answerCall',(data) => {
+    socket.to(data.to).emiit('callAccepted',data.signal)
   }
   )
 }

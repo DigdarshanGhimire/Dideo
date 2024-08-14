@@ -12,7 +12,6 @@ import checkValidation from "./components/functions/CheckValidation";
 
 const App = () => {
 
-  checkValidation();
   return(
     <BrowserRouter>
       <Routes>

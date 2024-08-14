@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Sign from '../components/Sign'
 import { useState, useRef } from 'react';
 import { redirect } from 'react-router-dom';
@@ -8,11 +8,17 @@ import Signbtn from '../components/buttons/Signbtn.jsx';
 
 
 const LogIn = () => {  
-  const form = useRef({'email':'','password':''});
-
-  checkValidation('/','sign');
-
+  
   const navigate = useNavigate();
+
+  checkValidation('/','sign',navigate);
+
+
+
+    
+
+
+  const form = useRef({'email':'','password':''});
   async function submitForm(e){
     
     const raw = await fetch('http://localhost:3000/form/submit/login',
