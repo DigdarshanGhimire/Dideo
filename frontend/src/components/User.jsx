@@ -2,7 +2,7 @@ import React from "react";
 import Btnicon from "./Btnicon";
 import { useRef } from "react";
 
-const User = ({localStream,cam,mic}) => {
+const User = ({localStream,cam,mic,name}) => {
   const videostat = useRef({
     0: (
       <svg

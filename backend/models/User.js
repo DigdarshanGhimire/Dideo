@@ -4,7 +4,8 @@ const User = mongoose.model('User',{
     name:String,
     email:String,
     phone:String,
-    password:String
+    password:String,
+    rooms:[]
 
 })
 

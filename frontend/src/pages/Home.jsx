@@ -3,21 +3,24 @@ import { Outlet, Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import checkValidation from "../components/functions/CheckValidation";
 import LogOut from "../components/LogOut";
-import { useState, useEffect} from "react";
+import { useState, useEffect, useContext} from "react";
+import profileData from "../components/fetches/profiledata";
+import { ConnectedContext } from "../components/context/globalcontext";
+import { connectRoom } from "../components/functions/connectRoom";
+import { SocketContext } from '../components/sockets/socketContext';
 
 const Home = () => {
 
 
   checkValidation();
-
-  const [username, setUsername] = useState('');
-
+  const {connected, setConnected} = useContext(ConnectedContext)
+  
+  const [profile, setProfile] = useState(null);
+  
+  const socket = useContext(SocketContext)
   useEffect(() => {
-    fetch('http://localhost:3000/api/profiledata',{credentials:"include"}).then(async (res) => {
-      const data = await res.json();
-      if(data.loggedIn){setUsername(data.username)}
-    }
-    )
+    
+      connectRoom(socket,setProfile)
     }, []);
     
   
@@ -28,17 +31,27 @@ const Home = () => {
 
   return (
     <div>
-      <div className="text-3xl font-bold justify-center items-center flex">{username}</div>
+      <div className="text-3xl font-bold justify-center items-center flex">{profile?profile.username:'Loading...'}</div>
 
       <div className="anchors grid">
         <Link to="/conference">Conference</Link>
         <Link to="/login">LogIn</Link>
         <Link to="/signup">Sign Up</Link>
-        <Link to="/signup">Sign Up</Link>
         <Link to='/profile/id'>Profile</Link>
+        <Link to='/createroom'>Create Room</Link>
+        <Link to='/room/collections/'></Link>
       </div>
 
-      <LogOut/>
+      {
+        profile?profile.rooms.map((room,index) => {
+          
+          <Link  to={`/room/${room}`} key={index}>{room}</Link>
+        }
+      ):'Loading...'
+    }
+
+    {profile?console.log(profile.rooms[0]):''}
+    
     </div>
   );
 };

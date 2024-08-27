@@ -604,8 +604,48 @@ video {
   height: 200px;
 }
 
+.h-\[\] {
+  height: ;
+}
+
+.h-\[g\] {
+  height: g;
+}
+
+.h-\[250\] {
+  height: 250;
+}
+
+.h-\[250px\] {
+  height: 250px;
+}
+
+.h-24 {
+  height: 6rem;
+}
+
+.h-56 {
+  height: 14rem;
+}
+
 .w-\[200px\] {
   width: 200px;
+}
+
+.w-16 {
+  width: 4rem;
+}
+
+.w-64 {
+  width: 16rem;
+}
+
+.w-\[\] {
+  width: ;
+}
+
+.w-\[inherit\] {
+  width: inherit;
 }
 
 .flex-col {
@@ -628,10 +668,6 @@ video {
   gap: 1.25rem;
 }
 
-.self-center {
-  align-self: center;
-}
-
 .rounded-lg {
   border-radius: 0.5rem;
 }
@@ -642,6 +678,11 @@ video {
 
 .bg-\[rgba\(0\2c 0\2c 0\2c 0\.5\)\] {
   background-color: rgba(0,0,0,0.5);
+}
+
+.bg-black {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 
 .bg-gray-900 {
@@ -725,4 +766,9 @@ video {
 
 .conferenceiconbtn:hover {
   background-color: rgba(0,0,0,0.7);
+}
+
+*{
+  margin: 0;
+  padding: 0;
 }

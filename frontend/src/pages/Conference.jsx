@@ -1,13 +1,16 @@
 import React from 'react'
 import CLayout from '../components/CLayout';
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useContext } from 'react';
 import checkValidation from '../components/functions/CheckValidation';
 import Btnicon from "../components/Btnicon";
 import User from "../components/User";
 import Peer from 'simple-peer'
 import io from 'socket.io-client'
+import profileData from '../components/fetches/profiledata';
+import BackURL from '../backendUrl';
+import Signbtn from '../components/buttons/Signbtn';
+import { SocketContext } from '../components/sockets/socketContext';
 
-import { socket } from '../components/sockets/socket';
 
  
 const Conference = () => {
@@ -23,15 +26,21 @@ const Conference = () => {
   const [initiator, setInitiator] = useState(false)
   const [stream, setStream] = useState(null);
   const [signals,setSignals] = useState({})
+  const [profile, setProfile] = useState({})
 
 
   const remoteStreams = useRef({});
+  const connectionRef = useRef(null);
+
+  const socket = useContext(SocketContext)
 
   useEffect(() => {
     
 
 
   }, [remoteUsers])
+
+
   
 
 
@@ -43,18 +52,10 @@ const Conference = () => {
   })
 
 
-  const startConference = () => {
-    new Peer({
-      initiator:true,
-      trickle:false,
-      stream:stream
-    })
-  }
-  
-
-  useEffect(() => {
-    localStream.current.srcObject = null;
+  const startConference = async () => {
     try{
+
+
 
       navigator.mediaDevices.getUserMedia({
         video : true,
@@ -64,17 +65,31 @@ const Conference = () => {
         localStream.current.srcObject = stream;
       }
       )
+      
+      const peer = new Peer({
+        initiator:true,
+        trickle:false,
+        stream:stream
+      })
 
-      peer.on('signal',(data) => {
-        socket.emit()
+      peer.on('signal',(signal) => {
+        setSignalingData(data)
+        socket.emit("callUser", {
+          allUsers:true,
+          from:me,
+          signal:signal,
+          name:profile.username
+
+        })
       }
       )
 
-      socket.on('me',(id) => {
-        setMe(id)
-        console.log(me);
+      peer.on('stream',(stream) => {
+        
       }
       )
+
+
 
       socket.on('callUser',(data) => {
         setIsUsersToJoin(true);
@@ -88,23 +103,64 @@ const Conference = () => {
         console.log(err);
     }
 
-    
   }
+  
+
+
+  //useEffect hooks:
+  useEffect(() => {
+    profileData().then((data) => {
+      if(data.loggedIn){
+        setProfile(data.content);
+        console.log(data.content)
+        socket.emit('connectRoom',{
+          id:data.content.id
+        })
+      }
+    }
+    )
+    
+    socket.on('me',(id) => {
+      setMe(id)
+    })
+
+    localStream.current.srcObject = null;
+  } 
   ,[])
+
+
+  useEffect(() => {
+    const unloader = ()=>{
+      if(stream){
+        stream.getTracks().forEach( (track) => {
+           track.stop()
+        }
+        )
+      }
+    }
+    window.addEventListener('beforeunload',unloader)
+    return () => {
+      unloader();
+      
+    }
+  }, [stream])
+  
+  
 
 
 
   return (
     <>
           <div className="holder ">
-      <div className="meetinglayout mx-2 my-1">
+      <div className="meetinglayout mx-2 my-1 bg-black">
         <div className="meetinginfo text-center">
           <h2 className="meetingname font-bold text-2xl text-center">ASCL</h2>
           <span>Organizer - Admin</span>
         </div>
         <div className="meeting ">
           <div className="meetingpeople flex gap-5 ">
-            <User localStream={localStream} cam={setCam} mic={setMic}/>
+            <User localStream={localStream} cam={setCam} mic={setMic} id='me' name={profile}/>
+            <Signbtn name='Start Conference' onclick={startConference}/>
 
           </div>
         </div>

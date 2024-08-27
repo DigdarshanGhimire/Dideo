@@ -11,7 +11,12 @@ const app = express()
 
 const server = http.createServer(app)
 
-const io = socket(server)
+const io = socket(server,{
+  cors:{
+    origin:"http://localhost:5173",
+    methods:["GET","POST"]
+  }
+})
 
 
 
@@ -22,6 +27,9 @@ const mongoose = require('mongoose')
 
 mongoose.connect('mongodb://127.0.0.1:27017/dideo');
 const User = require('./models/User.js')
+
+
+const Room = require('./models/Room.js')
 
 
 
@@ -61,12 +69,15 @@ const port = 3000;
 
 
 //Handling sockets
+
+
+
 io.on('connection',(socket) => {
-  console.log('socket.id')
-  socket.emit("me",socket.id)
+
   socket.on('disconnect',() => {
-    socket.broadcast.emit('CallEnded');
-  }
+    User.updateOne({_id:data.id},{$set:{online:false}})
+    console.log("Disconnected from socket backend"); 
+   }
   )
   socket.on('callUser',(data)=>{
     io.to(data.userToCall).emit('callUser', {signal:data.signalData, from: data.from, name: data.name})
@@ -74,8 +85,26 @@ io.on('connection',(socket) => {
 
   socket.on('answerCall',(data) => {
     socket.to(data.to).emiit('callAccepted',data.signal)
+  })
+
+  
+  socket.on('connectRoom',async (data) => {
+    User.updateOne({_id:data.id},{$set:{online:true}})
+    console.log('connected')
+    const sID = socket.id
+    console.log(socket.id,data)
+    socket.emit("me",socket.id)
+
+    result = await User.findById(data.id);
+    const rooms = result.rooms
+    socket.join(data.id)
+    rooms.forEach((room) => {
+      socket.join(`room -${room}`);
+    }
+    )
   }
   )
+
 }
 )
 
@@ -92,6 +121,28 @@ app.get('/', (req, res) => {
     res.json({loggedIn:false})
   }
 })
+
+
+app.post('/form/submit/create-room/',async (req,res) => {
+  if(req.session.user){
+    const room = new Room({
+      ...req.body, admins:[req.session.user.id], users:[req.session.user.id]
+    }
+  );
+  const user = await User.findOne({_id:req.session.user.id})
+  console.log('id', req.session.user.id)
+
+  const updateduser = await User.updateOne(
+    {_id:req.session.user.id},
+    {$set:{rooms:[...user.rooms, room._id]}}
+  )
+  console.log(updateduser)
+  room.save()
+    res.json({createdRoom:true, roomid:room._id})
+
+  }
+}
+)
 
 app.post('/form/submit/signup',async (req,res) => {
   console.log('yo')
@@ -120,7 +171,7 @@ app.post('/form/submit/signup',async (req,res) => {
   console.log(user.save())
   res.json({SignedUp:true, message:'Successful, Redirecting!'});
 }
-)
+) 
 
 
 app.post('/form/submit/login',async (req,res) => {
@@ -147,11 +198,22 @@ app.post('/form/submit/login',async (req,res) => {
 );
 
 
-app.get('/api/profiledata',(req,res) => {
+app.get('/api/profiledata',async (req,res) => {
   if(req.session.user){
-    return res.json({loggedIn:true,username:req.session.user.username});
+    const user = await User.findOne({_id:req.session.user.id});
+    return res.json({loggedIn:true,content:{username:req.session.user.username, id:req.session.user.id, email:user.email, rooms:user.rooms}});
   }
   return res.json({loggedIn:false, message:'LogIn first'})
+}
+)
+
+app.get('/api/roomdata/:roomid',async (req,res) => {
+  if(req.session.user){
+    const room = await Room.findOne(req.params.roomid)
+    
+    return res.json({})
+}
+return res.json({})
 }
 )
 

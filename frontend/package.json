@@ -11,10 +11,12 @@
     "tailwind": "npx tailwindcss -i ./src/input.css -o ./src/output.css --watch"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^2.2.7",
     "firebase": "^10.12.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.52.1",
+    "react-redux": "^9.1.2",
     "simple-peer": "^9.11.1",
     "socket.io-client": "^4.7.5"
   },
